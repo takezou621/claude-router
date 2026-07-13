@@ -1,0 +1,5 @@
+# 機密情報・ローカル生成物は絶対にコミットしない
+config.json
+*.log
+*.bak.*
+.DS_Store
