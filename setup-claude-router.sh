@@ -231,10 +231,10 @@ function buildReqHeaders(inHeaders, upstream, bodyLen) {
 }
 
 const server = http.createServer(async (clientReq, clientRes) => {
-  // ヘルスチェック
-  if (clientReq.method === 'GET' && (clientReq.url === '/__health' || clientReq.url === '/')) {
+  // ヘルスチェック (GET + HEAD: Claude Code の接続プローブは HEAD / を投げる)
+  if ((clientReq.method === 'GET' || clientReq.method === 'HEAD') && (clientReq.url === '/__health' || clientReq.url === '/')) {
     clientRes.writeHead(200, { 'content-type': 'application/json' });
-    clientRes.end(JSON.stringify({ ok: true, service: 'claude-router' }));
+    clientRes.end(clientReq.method === 'HEAD' ? undefined : JSON.stringify({ ok: true, service: 'claude-router' }));
     return;
   }
 
